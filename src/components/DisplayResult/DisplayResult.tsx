@@ -6,7 +6,7 @@ type DisplayResultProps = {
 
 const DisplayResult = ({ playerChoice, computerChoice, result }: DisplayResultProps) => {
   if (!playerChoice || !computerChoice) {
-    return <div>Choose Rock, Paper or Scissors!</div>;
+    return <div>First to 3 wins!</div>
   }
 
   return (

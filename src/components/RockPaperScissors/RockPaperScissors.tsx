@@ -5,6 +5,7 @@ import DisplayResult from '@/components/DisplayResult/DisplayResult';
 import ScoreBoard from '@/components/ScoreBoard/ScoreBoard';
 import ResetButton from '@/components/ResetButton/ResetButton';
 import ChooseName from '@/components/ChooseName/ChooseName';
+import PlayAgain from '../PlayAgain/playAgain';
 
 const RockPaperScissors = () => {
   const [userName, setUserName] = useState<string | null>(null);
@@ -31,10 +32,44 @@ const RockPaperScissors = () => {
 
     if (gameResult === 'You winnn!') {
       setPlayerScore((prev) => prev + 1);
+      if (playerScore === 2) { // this works!
+        setWinner('player');
+      }
     } else if (gameResult === 'Stupid bot computer wins!') {
       setComputerScore((prev) => prev + 1);
+      if (computerScore === 2) {
+        setWinner('computer')
+      }
     }
   };
+
+/*   const handleSelect = (playerSelection: 'Rock' | 'Paper' | 'Scissors') => {
+    const computerSelection = getRandomChoice();
+    setPlayerChoice(playerSelection);
+    setComputerChoice(computerSelection);
+  
+    const gameResult = decideWinner(playerSelection, computerSelection);
+    setResult(gameResult);
+  
+    // Update scores based on the result
+    if (gameResult === 'You winnn!') {
+      setPlayerScore((prev) => {                                // score-update function
+        const newScore = prev + 1;
+        if (newScore === 3) {
+          setWinner('player'); // Set the winner if player reaches 3 points
+        }
+        return newScore;  // without returning newScore, React has nothing to update, and the state remains unchanged
+      });
+    } else if (gameResult === 'Stupid bot computer wins!') {
+      setComputerScore((prev) => {                              // score-update function
+        const newScore = prev + 1;
+        if (newScore === 3) {
+          setWinner('computer'); // Set the winner if computer reaches 3 points
+        }
+        return newScore;
+      });
+    }
+  }; */
 
   const decideWinner = (playerChoice: 'Rock' | 'Paper' | 'Scissors', computerChoice: 'Rock' | 'Paper' | 'Scissors'): string => {
     if (playerChoice === computerChoice) return "It's a tie!";
@@ -64,6 +99,32 @@ const RockPaperScissors = () => {
   return (
     <>
       {!userName ? ( // if no username show ChooseName else show <main> ?
+      <ChooseName updateName={handleNameSelect} />
+        ) : (
+      <main>
+        {winner ? (
+          <>
+            <h2>{winner === 'player' ? 'You won the game!' : 'Game over, you lost!'}</h2>
+            <PlayAgain onReset={handleReset} />
+          </>
+        ) : (
+          <>
+            <h1>Welcome, {userName}!</h1>
+            <SelectionPanel onSelect={handleSelect} />
+            <DisplayResult playerChoice={playerChoice} computerChoice={computerChoice} result={result} />
+            <ScoreBoard playerScore={playerScore} computerScore={computerScore} userName={userName} />
+            <ResetButton onReset={handleReset} />
+          </>
+        )}
+      </main>
+          )}
+      </>
+    );
+  };
+
+/*   return (
+    <>
+      {!userName ? ( // if no username show ChooseName else show <main> ?
         <ChooseName updateName={handleNameSelect} />
       ) : (
         <main>
@@ -76,6 +137,6 @@ const RockPaperScissors = () => {
       )}
     </>
   );
-};
+}; */
 
 export default RockPaperScissors;
